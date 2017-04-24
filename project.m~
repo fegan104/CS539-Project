@@ -34,4 +34,4 @@ TESTING = csvread(fullfile('data', 'testing.csv'));
 %We apply meta-learning techniques to classify our data
 disp('treeBagger')
 treeBagger = TreeBagger(20, TRAINING(:, 1:end-1),TRAINING(:, end), 'Method','classification');
-classperf(TESTING(:, end), str2num(cell2mat(predict(treeBagger, TESTING(:, 1:end-1)))))
+classperf(TESTING(:, end), str2num(predict(treeBagger, TESTING(:, 1:end-1))))

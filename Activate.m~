@@ -26,7 +26,6 @@ function model = Activate(activation, tra, tes)
     %Test perofrmance of our classification
     classes = vec2ind(trainedModel(table2array(tes(:, 1:end-1))'));
     classes = classes-1;%move data from indices to class
-    disp(activation)
-    classperf(table2array(tes(:, end)), classes)
+    classperf(table2array(tes(:, end)), classes, 'PositiveValue', ['zero', 'one', 'two', 'three', 'four', ])
     
 model = trainedModel;
