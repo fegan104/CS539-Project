@@ -2,11 +2,18 @@
 TRAINING = csvread(fullfile('data', 'training.csv'));
 TESTING = csvread(fullfile('data', 'testing.csv'));
 
-%Separate out the data from the responses
-trainingData = TRAINING(:, 1:end-1);
-trainingResp = TRAINING(:, end);
-testingData = TESTING(:, 1:end-1);
-testingResp = TESTING(:, end);
+%Pure Linear
+Activate('purelin', array2table(TRAINING), array2table(TESTING));
 
+%ReLU
 
+%Sigmoid (logsig)
+Activate('logsig', array2table(TRAINING), array2table(TESTING));
 
+%tanh (tansig)
+Activate('tansig', array2table(TRAINING), array2table(TESTING));
+
+%Bounded ReLU (satlin)
+Activate('satlin', array2table(TRAINING), array2table(TESTING));
+
+%Leaky ReLu (custom)
