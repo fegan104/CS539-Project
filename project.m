@@ -5,7 +5,8 @@ TESTING = csvread(fullfile('data', 'testing.csv'));
 %Pure Linear
 Activate('purelin', array2table(TRAINING), array2table(TESTING));
 
-%ReLU
+%ReLU (poslin)
+Activate('poslin', array2table(TRAINING), array2table(TESTING));
 
 %Sigmoid (logsig)
 Activate('logsig', array2table(TRAINING), array2table(TESTING));
