@@ -6,9 +6,11 @@
 %   tes - Test set to be compared against as a table.
 %Returns:
 %   performance metrics
-function model = Activate(activation, tra, tes)
+function result = Activate(activation, tra, tes)
     %Instantiate our neural net with 3 layers and 20 hidden units
-    m = patternnet([20 20]);
+    m = patternnet();
+    %m.trainParam.goal = 0.001;
+   
     
     %apply our selected activation function
     for l = 1:size(m.layers, 1)-1
@@ -22,11 +24,16 @@ function model = Activate(activation, tra, tes)
     train_in_vec = transpose(X);
     train_out_vec = full(ind2vec(Y+1));
     %Train model on tranformed data sets
-    trainedModel = train(m, train_in_vec, train_out_vec);
+    [trainedModel trainingRecord] = train(m, train_in_vec, train_out_vec);
     %Test perofrmance of our classification
     classes = vec2ind(trainedModel(table2array(tes(:, 1:end-1))'));
     classes = classes-1;%move data from indices to class
-    disp(activation)
-    classperf(table2array(tes(:, end)), classes)
-    
-model = trainedModel;
+    perf = classperf(table2array(tes(:, end)), classes);
+
+    accuracy = perf.CorrectRate;
+    recall = perf.Sensitivity;
+    precision = perf.Specificity;
+    epochs = trainingRecord.best_epoch;
+    %model = trainedModel;
+    result = struct('accuracy', accuracy, 'precision', precision, 'recall', recall, 'epochs', epochs);
+end
