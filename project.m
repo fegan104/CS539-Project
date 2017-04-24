@@ -18,3 +18,6 @@ Activate('tansig', array2table(TRAINING), array2table(TESTING));
 Activate('satlin', array2table(TRAINING), array2table(TESTING));
 
 %Leaky ReLu (custom)
+Activate('lrelu', array2table(TRAINING), array2table(TESTING));
+
+
