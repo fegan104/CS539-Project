@@ -8,32 +8,28 @@
 %   performance metrics
 function result = Activate(activation, tra, tes)
     %Instantiate our neural net with 3 layers and 20 hidden units
-    m = patternnet();
-    %m.trainParam.goal = 0.001;
-   
+    m = patternnet(800);
+    
+    tra_flat = flatten_images(tra.images)';
+    tra_out = full(ind2vec(tra.labels' + 1));
+    
+    tes_flat = flatten_images(tes.images)';
     
     %apply our selected activation function
     for l = 1:size(m.layers, 1)-1
         m.layers{l}.transferFcn = activation;
     end
     
-    %Transform input data for training
-    tra_col = size(tra, 2);
-    X = table2array(tra(:, 1:tra_col-1));
-    Y = transpose(table2array(tra(:, tra_col)));
-    train_in_vec = transpose(X);
-    train_out_vec = full(ind2vec(Y+1));
-    %Train model on tranformed data sets
-    [trainedModel trainingRecord] = train(m, train_in_vec, train_out_vec);
+    [trainedModel, trainingRecord] = train(m, tra_flat, tra_out);
+    
     %Test perofrmance of our classification
-    classes = vec2ind(trainedModel(table2array(tes(:, 1:end-1))'));
-    classes = classes-1;%move data from indices to class
-    perf = classperf(table2array(tes(:, end)), classes);
-
-    accuracy = perf.CorrectRate;
-    recall = perf.Sensitivity;
-    precision = perf.Specificity;
-    epochs = trainingRecord.best_epoch;
-    %model = trainedModel;
-    result = struct('accuracy', accuracy, 'precision', precision, 'recall', recall, 'epochs', epochs);
+    pred = vec2ind(trainedModel(tes_flat));
+    pred_class = pred - 1; %move data from indices to class
+    perf = classperf(tes.labels, pred_class);
+    
+    result = struct(...
+        'accuracy', perf.CorrectRate,...
+        'precision', perf.Sensitivity,...
+        'recall', perf.Specificity,...
+        'epochs', trainingRecord.best_epoch);
 end
