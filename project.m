@@ -35,3 +35,8 @@ TESTING = csvread(fullfile('data', 'testing.csv'));
 disp('treeBagger')
 treeBagger = TreeBagger(20, TRAINING(:, 1:end-1),TRAINING(:, end), 'Method','classification');
 classperf(TESTING(:, end), str2num(cell2mat(predict(treeBagger, TESTING(:, 1:end-1)))))
+
+disp('boosting')
+boosting = fitcensemble(TRAINING(:, 1:end-1),TRAINING(:, end));
+classperf(TESTING(:, end), predict(boosting, TESTING(:, 1:end-1)))
+
