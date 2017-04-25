@@ -8,7 +8,8 @@
 %   performance metrics
 function result = Activate(activation, tra, tes)
     %Instantiate our neural net with 3 layers and 20 hidden units
-    m = patternnet(800);
+    m = patternnet(100);
+    %m.trainParam.epochs =1;
     
     tra_flat = flatten_images(tra.images)';
     tra_out = full(ind2vec(tra.labels' + 1));
@@ -31,5 +32,7 @@ function result = Activate(activation, tra, tes)
         'accuracy', perf.CorrectRate,...
         'precision', perf.Sensitivity,...
         'recall', perf.Specificity,...
-        'epochs', trainingRecord.best_epoch);
+        'epochs', trainingRecord.best_epoch,...
+        'trainingRecord', trainingRecord,...
+        'perf', perf);
 end

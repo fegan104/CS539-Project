@@ -1,3 +1,3 @@
 function a = alpha()
-    a = .2;
+    a = .01;
 end
