@@ -6,27 +6,33 @@
 %   tes - Test set to be compared against as a table.
 %Returns:
 %   performance metrics
-function model = Activate(activation, tra, tes)
+function result = Activate(activation, tra, tes)
     %Instantiate our neural net with 3 layers and 20 hidden units
-    m = patternnet([20 20]);
+    m = patternnet(100);
+    %m.trainParam.epochs =1;
+    
+    tra_flat = flatten_images(tra.images)';
+    tra_out = full(ind2vec(tra.labels' + 1));
+    
+    tes_flat = flatten_images(tes.images)';
     
     %apply our selected activation function
     for l = 1:size(m.layers, 1)-1
         m.layers{l}.transferFcn = activation;
     end
     
-    %Transform input data for training
-    tra_col = size(tra, 2);
-    X = table2array(tra(:, 1:tra_col-1));
-    Y = transpose(table2array(tra(:, tra_col)));
-    train_in_vec = transpose(X);
-    train_out_vec = full(ind2vec(Y+1));
-    %Train model on tranformed data sets
-    trainedModel = train(m, train_in_vec, train_out_vec);
-    %Test perofrmance of our classification
-    classes = vec2ind(trainedModel(table2array(tes(:, 1:end-1))'));
-    classes = classes-1;%move data from indices to class
-    disp(activation)
-    classperf(table2array(tes(:, end)), classes)
+    [trainedModel, trainingRecord] = train(m, tra_flat, tra_out);
     
-model = trainedModel;
+    %Test perofrmance of our classification
+    pred = vec2ind(trainedModel(tes_flat));
+    pred_class = pred - 1; %move data from indices to class
+    perf = classperf(tes.labels, pred_class);
+    
+    result = struct(...
+        'accuracy', perf.CorrectRate,...
+        'precision', perf.Sensitivity,...
+        'recall', perf.Specificity,...
+        'epochs', trainingRecord.best_epoch,...
+        'trainingRecord', trainingRecord,...
+        'perf', perf);
+end
