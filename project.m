@@ -5,9 +5,9 @@ TESTING = csvread(fullfile('data', 'testing.csv'));
 %Here we test the performance of six different ectivation function
 %all with 20 hidden unit and 3 layers on patternet.
 
-% %Pure Linear
-% Activate('purelin', array2table(TRAINING), array2table(TESTING));
-% 
+%Pure Linear
+Activate('purelin', array2table(TRAINING), array2table(TESTING));
+
 % %ReLU (poslin)
 % Activate('poslin', array2table(TRAINING), array2table(TESTING));
 % 
@@ -32,11 +32,14 @@ TESTING = csvread(fullfile('data', 'testing.csv'));
 % classperf(TESTING(:, end), predict(ecoc, TESTING(:, 1:end-1)))
 
 %We apply meta-learning techniques to classify our data
-disp('treeBagger')
-treeBagger = TreeBagger(20, TRAINING(:, 1:end-1),TRAINING(:, end), 'Method','classification');
-classperf(TESTING(:, end), str2num(cell2mat(predict(treeBagger, TESTING(:, 1:end-1)))))
-
-disp('boosting')
-boosting = fitcensemble(TRAINING(:, 1:end-1),TRAINING(:, end));
-classperf(TESTING(:, end), predict(boosting, TESTING(:, 1:end-1)))
+% disp('treeBagger')
+% treeBagger = TreeBagger(20, TRAINING(:, 1:end-1),TRAINING(:, end), 'Method','classification');
+% classperf(TESTING(:, end), str2num(cell2mat(predict(treeBagger, TESTING(:, 1:end-1)))))
+% 
+% disp('BaggingNN')
+% BagNN(patternnet([2 2]), TRAINING, TESTING, 5)
+% 
+% disp('boosting')
+% boosting = fitcensemble(TRAINING(:, 1:end-1),TRAINING(:, end));
+% classperf(TESTING(:, end), predict(boosting, TESTING(:, 1:end-1)))
 
