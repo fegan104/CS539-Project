@@ -9,7 +9,9 @@
 function result = Activate(activation, tra, tes)
     %Instantiate our neural net with 3 layers and 20 hidden units
     m = patternnet(100);
-    %m.trainParam.epochs =1;
+    m.trainParam.epochs = 100;
+    m.trainParam.max_fail = 100;
+    m.inputs{1}.processFcns(1) = [];
     
     tra_flat = flatten_images(tra.images)';
     tra_out = full(ind2vec(tra.labels' + 1));
@@ -21,6 +23,8 @@ function result = Activate(activation, tra, tes)
         m.layers{l}.transferFcn = activation;
     end
     
+    %m.b{1} = randn(400,1)*100;
+    
     [trainedModel, trainingRecord] = train(m, tra_flat, tra_out);
     
     %Test perofrmance of our classification
@@ -29,6 +33,7 @@ function result = Activate(activation, tra, tes)
     perf = classperf(tes.labels, pred_class);
     
     result = struct(...
+        'model', trainedModel,...
         'accuracy', perf.CorrectRate,...
         'precision', perf.Sensitivity,...
         'recall', perf.Specificity,...
