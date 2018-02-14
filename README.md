@@ -45,8 +45,8 @@ This is a control for our experiments, using a linear activation function is ess
 |(Leaky ReLU, a=0.1) |93.84%    |0.9786    |0.9952|
 |(purelin/None)      |91.16%    |0.9684    |0.9938|
 
-!()[/training-weights.png]
-!()[/bad-weights.png]
+!()[traingin-weights.png]
+!()[bad-weights.png]
 
 ### Other Results/ Meta Learning
 |Model              |Accuracy |Precision |Recall|
@@ -58,4 +58,4 @@ This is a control for our experiments, using a linear activation function is ess
 |(Leaky ReLU, a=0.1)|93.84%   |0.9786    |0.9952|
 |(purelin/None)     |91.16%   |0.9684    |0.9938|
 
-!()[/leaky-realy-alpha.png]
+!()[leaky-realy-alpha.png]
